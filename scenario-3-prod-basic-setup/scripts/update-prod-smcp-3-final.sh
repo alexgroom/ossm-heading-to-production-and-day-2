@@ -31,7 +31,7 @@ spec:
           cpu: 200m
           memory: 1Gi
         limits:
-          memory: 1Gi
+          memory: 2Gi
       redundancyPolicy: ZeroRedundancy              // Index redundancy"
 
 echo "apiVersion: jaegertracing.io/v1
@@ -55,7 +55,7 @@ spec:
           cpu: 200m
           memory: 1Gi
         limits:
-          memory: 1Gi
+          memory: 2Gi
       redundancyPolicy: ZeroRedundancy"| oc apply -n $SM_CP_NS -f -
 
 
@@ -205,7 +205,7 @@ spec:
       kiali:
         deployment: {}
         pod: {}
-  version: v2.3
+  version: v2.4
   telemetry:
     type: Istiod"
 
@@ -315,7 +315,7 @@ spec:
       kiali:
         deployment: {}
         pod: {}
-  version: v2.3
+  version: v2.4
   telemetry:
     type: Istiod"| oc apply -n $SM_CP_NS -f -
 

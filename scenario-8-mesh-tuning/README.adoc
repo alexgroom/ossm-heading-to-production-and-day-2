@@ -44,7 +44,7 @@ Like in any other tuning exercise in order to size correctly a mesh _data plane_
 
 === Practical _Data Plane_ Tuning exercise
 
-In this exercise we will showcase a process of tuning the `flights` and `mysqldb` _data plane_ components to cater for better performance when receiving upto *_250/rps_* from the external partner via `gto-external-ingressgateway` gateway. The link:https://linux.die.net/man/1/siege[siege] _http_ multi-threaded load testing and benchmarking utility has been employed to perform the tests.
+In this exercise we will showcase a process of tuning the `flights` and `mysqldb` _data plane_ components to cater for better performance when receiving upto *_250/rps_* from the external partner via `ge-ingressgateway` gateway. The link:https://linux.die.net/man/1/siege[siege] _http_ multi-threaded load testing and benchmarking utility has been employed to perform the tests.
 
 . In preparation for the tests relax the _TLS_ settings for `Gateway/travel-api-gateway` to _SIMPLE_ TLS by executing `./scripts/set-simple-tls-travel-api-gateway.sh`
 . Prepare to observe statistics and metrics around the performance and resources utilization which constitute application performance _Service Level Indicators (SLIs)_.
@@ -65,7 +65,7 @@ increase(istio_request_duration_milliseconds_sum{destination_canonical_service="
 +
 ----
 TOKEN=$(curl -sLk --data "username=gtouser&password=gtouser&grant_type=password&client_id=istio&client_secret=bcd06d5bdd1dbaaf81853d10a66aeb989a38dd51" https://keycloak-rhsso.apps.ocp4.rhlab.de/auth/realms/servicemesh-lab/protocol/openid-connect/token | jq .access_token)
-siege -b -c500 -t60s https://gto-external-prod-istio-system.apps.ocp4.rhlab.de/flights/Tallinn --header="Authorization: Bearer $TOKEN"
+siege -b -c500 -t60s https://ge-prod-istio-system.apps.ocp4.rhlab.de/flights/Tallinn --header="Authorization: Bearer $TOKEN"
 ----
 
 ==== Test 1 - Default _data plane_ values
@@ -236,9 +236,9 @@ Following the example of _how to test the performance_ of the _data plane_ we pr
 +
 The `grafana` and `kiali` observability components allow (as does the output form `siege`) to determine both _throughput_ and _latency_.
 +
-image::./images/gto-external-ingressgateway-grafana-graph.png[300,700]
+image::./images/ge-ingressgateway-grafana-graph.png[300,700]
 +
-image::./images/gto-external-ingressgateway-kiali-metrics.png[300,700]
+image::./images/ge-ingressgateway-kiali-metrics.png[300,700]
 +
 Whilst with the use of `prometheus` alerts can be set against metrics such as the distribution of the request duration (`istio_request_duration_milliseconds`) in order to review and tune accordingly the _data plane_.
 
@@ -257,10 +257,10 @@ histogram_quantile(0.95,
 )
 ----
 
-. Tuning of the individual container resources is equally important. The script provided during the tuning exercise offers a means of retrieving the CPU/Memory of the `istio-proxy` and main `workload` containers whilst prometheus also exposes the _envoy_ memory metrics (on prometheus `envoy_server_memory_allocated{app="gto-external-ingressgateway"}`, `envoy_server_memory_heap_size{app="gto-external-ingressgateway"}`)
+. Tuning of the individual container resources is equally important. The script provided during the tuning exercise offers a means of retrieving the CPU/Memory of the `istio-proxy` and main `workload` containers whilst prometheus also exposes the _envoy_ memory metrics (on prometheus `envoy_server_memory_allocated{app="ge-ingressgateway"}`, `envoy_server_memory_heap_size{app="ge-ingressgateway"}`)
 +
 ----
-oc exec gto-external-ingressgateway-5d9b4c5b6d-8ddqt -n prod-istio-system -- curl -s localhost:15000/memory; sleep 5; done
+oc exec ge-ingressgateway-5d9b4c5b6d-8ddqt -n prod-istio-system -- curl -s localhost:15000/memory; sleep 5; done
 {
   "allocated": "54066928",
   "heap_size": "128974848",

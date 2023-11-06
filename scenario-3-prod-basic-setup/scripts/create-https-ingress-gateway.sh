@@ -76,7 +76,7 @@ echo "Create Certificate Signing Request, TLS Certificate for hosted service for
 echo "---------------------------------------------------------------------------------"
 echo
 echo "../../common-scripts/create-app-csr-certs-keys.sh $PREFIX.conf $PREFIX"
-../../common-scripts/create-app-csr-certs-keys.sh $PREFIX.conf $PREFIX
+../common-scripts/create-app-csr-certs-keys.sh $PREFIX.conf $PREFIX
 sleep 5
 echo
 

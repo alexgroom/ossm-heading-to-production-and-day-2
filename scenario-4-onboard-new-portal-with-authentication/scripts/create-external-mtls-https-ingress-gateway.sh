@@ -2,7 +2,7 @@
 
 SM_CP_NS=$1
 DOMAIN_NAME=$2
-PREFIX=gto-external
+PREFIX=ge
 
 echo '---------------------------------------------------------------------------'
 echo 'ServiceMesh Control Plane Namespace        : '$SM_CP_NS
@@ -200,7 +200,7 @@ echo "Ingress Route [$PREFIX-$SM_CP_NS.$DOMAIN_NAME]"
 echo "===================================================================================="
 echo
 echo create-client-certs-keys.sh curl
-create-client-certs-keys.sh curl
+./scripts/create-client-certs-keys.sh curl
 
 echo
 sleep 5

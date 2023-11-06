@@ -37,7 +37,7 @@ cd ossm-heading-to-production-and-day-2/scenario-4-onboard-new-portal-with-authe
 
 # Add to SMCP
     additionalIngress:
-      gto-external-ingressgateway:
+      ge-ingressgateway:
         enabled: true
         runtime:
           deployment:
@@ -46,20 +46,20 @@ cd ossm-heading-to-production-and-day-2/scenario-4-onboard-new-portal-with-authe
         service:
           metadata:
             labels:
-              app: gto-external-ingressgateway
+              app: ge-ingressgateway
           selector:
-            app: gto-external-ingressgateway
+            app: ge-ingressgateway
 
 
 ./scripts/create-external-mtls-https-ingress-gateway.sh prod-istio-system <OCP CLUSTER DOMAIN eg. apps.example.com>
 ----
 
-* The result is a new pod for `gto-external-ingressgateway` is created, a TLS passthrough Route to expose access to it and an Istio config `travel-api-gateway` which defines the MUTUAL TLS requirement and the secret which will contain the certificates and keys.
+* The result is a new pod for `ge-ingressgateway` is created, a TLS passthrough Route to expose access to it and an Istio config `travel-api-gateway` which defines the MUTUAL TLS requirement and the secret which will contain the certificates and keys.
 +
-image::./images/route-gto-external-ingressgateway.png[300,700]
-image::./images/pod-gto-external-ingressgateway.png[300,700]
-image::./images/kiali-gw-gto-external.png[300,700]
-image::./images/kiali-travel-api-gw-gto-external.png[300,700]
+image::./images/route-ge-ingressgateway.png[300,700]
+image::./images/pod-ge-ingressgateway.png[300,700]
+image::./images/kiali-gw-ge.png[300,700]
+image::./images/kiali-travel-api-gw-ge.png[300,700]
 
 
 [NOTE]
@@ -75,15 +75,15 @@ Actions with role `Mesh Developer`
 ./scripts/deploy-external-travel-api-mtls-vs.sh prod prod-istio-system
 ----
 +
-The result will be an mTLS handshake between the _GTO_ client and the `Travel Agency APIs` via the newly create `gto-external-ingressgateway`
+The result will be an mTLS handshake between the _GTO_ client and the `Travel Agency APIs` via the newly create `ge-ingressgateway`
 +
 ----
-curl -v -X GET --cacert ca-root.crt --key curl-client.key --cert curl-client.crt  https://gto-external-prod-istio-system.apps.ocp4.rhlab.de/flights/Tallinn
+curl -v -X GET --cacert ca-root.crt --key curl-client.key --cert curl-client.crt  https://ge-prod-istio-system.apps.ocp4.rhlab.de/flights/Tallinn
 Note: Unnecessary use of -X or --request, GET is already inferred.
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                  Dload  Upload   Total   Spent    Left  Speed
   0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0*   Trying 46.4.107.61:443...
-* Connected to gto-external-prod-istio-system.apps.ocp4.rhlab.de (46.4.107.61) port 443 (#0)
+* Connected to ge-prod-istio-system.apps.ocp4.rhlab.de (46.4.107.61) port 443 (#0)
 * ALPN, offering h2
 * ALPN, offering http/1.1
 * successfully set certificate verify locations:
@@ -115,10 +115,10 @@ Note: Unnecessary use of -X or --request, GET is already inferred.
 * SSL connection using TLSv1.3 / TLS_AES_256_GCM_SHA384
 * ALPN, server accepted to use h2
 * Server certificate:
-*  subject: C=UK; ST=London; L=London; O=RedHat; CN=gto-external-prod-istio-system.apps.ocp4.rhlab.de
+*  subject: C=UK; ST=London; L=London; O=RedHat; CN=ge-prod-istio-system.apps.ocp4.rhlab.de
 *  start date: Aug 15 13:45:42 2022 GMT
 *  expire date: Aug 15 13:45:42 2023 GMT
-*  common name: gto-external-prod-istio-system.apps.ocp4.rhlab.de (matched)
+*  common name: ge-prod-istio-system.apps.ocp4.rhlab.de (matched)
 *  issuer: C=UK; ST=London; L=London; OU=stelios; CN=redhat.com; emailAddress=stelios@redhat.com
 *  SSL certificate verify ok.
 * Using HTTP2, server supports multiplexing
@@ -128,7 +128,7 @@ Note: Unnecessary use of -X or --request, GET is already inferred.
 * Using Stream ID: 1 (easy handle 0x556f26662ee0)
 } [5 bytes data]
 > GET /flights/Tallinn HTTP/2
-> Host: gto-external-prod-istio-system.apps.ocp4.rhlab.de
+> Host: ge-prod-istio-system.apps.ocp4.rhlab.de
 > user-agent: curl/7.79.1
 > accept: */*
 >
@@ -149,7 +149,7 @@ Note: Unnecessary use of -X or --request, GET is already inferred.
 <
 { [123 bytes data]
 100   123  100   123    0     0    471      0 --:--:-- --:--:-- --:--:--   473
-* Connection #0 to host gto-external-prod-istio-system.apps.ocp4.rhlab.de left intact
+* Connection #0 to host ge-prod-istio-system.apps.ocp4.rhlab.de left intact
 [
   {
     "airline": "Red Airlines",
@@ -166,7 +166,7 @@ Note: Unnecessary use of -X or --request, GET is already inferred.
 ]
 ----
 +
-image::../images/gto-external-ingressgateway.png[300,700]
+image::../images/ge-ingressgateway.png[300,700]
 
 == Use JWT authentication
 
@@ -174,7 +174,7 @@ The intended final workflow of authentication for the `GTO` requests with a `JWT
 
 0. the user authenticates to RHSSO and get a JWT token (not shown in the above picture);
 1. the user performs an HTTP request to `https://<route>/travels` (or one of `cars`, `hotels`, `insurances`, `flights`) and passes along this request the JWT token;
-3. The 'istio-proxy' container of the 'gto-external-ingressgateway' POD checks the validity of the JWT token as defined by the 'RequestAuthentication' object and permissions defined in the 'AuthorizationPolicy' object.
+3. The 'istio-proxy' container of the 'ge-ingressgateway' POD checks the validity of the JWT token as defined by the 'RequestAuthentication' object and permissions defined in the 'AuthorizationPolicy' object.
 4. if the JWT token is valid, user accesses the `/PATH` - otherwise, an error message is returned to the user (code `403`, message `RBAC denied` or others).
 
 * Pros:
@@ -214,7 +214,7 @@ ingress routers CA certificate to istiod so it can verify the TLS certificate fo
 ./scripts/mount-rhsso-cert-to-istiod.sh prod-istio-system production <CLUSTERNAME> <BASEDOMAIN>
 ----
 
-=== Create `RequestAuthentication` and `AuthorizationPolicy` to ALLOW access for `gto-external` user `gtouser`
+=== Create `RequestAuthentication` and `AuthorizationPolicy` to ALLOW access for `ge` user `gtouser`
 
 * The created `RequestAuthentication` object enforces in `Istio` that only _JWT_ tokens issued by the RHSSO will be used to
 authenticate/authorize user requests for `cars`, `travels`, `hotels`, `insurances` and `flights`.
@@ -225,23 +225,23 @@ authenticate/authorize user requests for `cars`, `travels`, `hotels`, `insurance
 Actions with role `Mesh Operator`
 ====
 
-* As these are applied on the newly create `gto-external-ingressgateway` in `prod-istio-system` it will be applied by *emma* the Mesh Operator
+* As these are applied on the newly create `ge-ingressgateway` in `prod-istio-system` it will be applied by *emma* the Mesh Operator
 ----
 ./login-as.sh emma
 oc -n prod-istio-system apply -f approach_1/yaml/istio/jwt/01_requestauthentication.yaml
 oc -n prod-istio-system apply -f approach_1/yaml/istio/jwt/02_authpolicy_allow_from_servicemesh-lab_realm.yaml
 ----
-* The result will be for any request coming in via `gto-external` Route and then hitting the `gto-external-ingressgateway` to be intercepted and required to contain beyond the TLS certificate for `mTLS` on the `Gateway` an additional `JWT` valid token before the request is allowed to proceed.
+* The result will be for any request coming in via `ge` Route and then hitting the `ge-ingressgateway` to be intercepted and required to contain beyond the TLS certificate for `mTLS` on the `Gateway` an additional `JWT` valid token before the request is allowed to proceed.
 +
 image::../images/gto-RequestAuthentication-AuthorizationPolicy.png[400,1000]
 
 
-=== Access `gto-external` exposed _Travel Agency APIs_ with JWT
+=== Access `ge` exposed _Travel Agency APIs_ with JWT
 
 * First, ensure that you cannot access anymore the `travels`, `cars` applications without a valid `JWT` token (it might take a few seconds for the changes to apply)
 +
 ----
-export GATEWAY_URL=$(oc -n prod-istio-system get route gto-external -o jsonpath='{.spec.host}')
+export GATEWAY_URL=$(oc -n prod-istio-system get route ge -o jsonpath='{.spec.host}')
 curl -v -X GET --cacert ca-root.crt --key curl-client.key --cert curl-client.crt https://$GATEWAY_URL/cars/Tallinn |jq
 curl -v -X GET --cacert ca-root.crt --key curl-client.key --cert curl-client.crt https://$GATEWAY_URL/travels/Tallinn |jq
 curl -v -X GET --cacert ca-root.crt --key curl-client.key --cert curl-client.crt https://$GATEWAY_URL/flights/Tallinn |jq
@@ -266,10 +266,10 @@ echo $TOKEN
 * Finally, use this JWT token to access as `GTO` user the _Travel Agency APIs_
 +
 ----
-./scripts/call-via-mtls-and-jwt-travel-agency-api.sh prod-istio-system gto-external $TOKEN
+./scripts/call-via-mtls-and-jwt-travel-agency-api.sh prod-istio-system ge $TOKEN
 ----
 +
-image::../images/gto-external-ingressgateway-jtw.png[100,300]
+image::../images/ge-ingressgateway-jtw.png[100,300]
 
 IMPORTANT: Next in link:../scenario-5-new-regulations-mtls-everywhere/README.adoc[Scenario-5] Help the Travel to Harden security with Corporate CA and Authorization Policies
 

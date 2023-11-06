@@ -105,7 +105,7 @@ spec:
         pod: {}
       service: {}
     additionalIngress:
-      gto-external-ingressgateway:
+      ge-ingressgateway:
         enabled: true
         runtime:
           deployment:
@@ -114,9 +114,9 @@ spec:
         service:
           metadata:
             labels:
-              app: gto-external-ingressgateway
+              app: ge-ingressgateway
           selector:
-            app: gto-external-ingressgateway
+            app: ge-ingressgateway
     openshiftRoute:
       enabled: false
   policy:
@@ -267,7 +267,7 @@ spec:
             name: tls
           - port: 8188
             name: https-discovery
-      gto-external-ingressgateway:
+      ge-ingressgateway:
         enabled: true
         runtime:
           deployment:
@@ -276,9 +276,9 @@ spec:
         service:
           metadata:
             labels:
-              app: gto-external-ingressgateway
+              app: ge-ingressgateway
           selector:
-            app: gto-external-ingressgateway
+            app: ge-ingressgateway
     openshiftRoute:
       enabled: false
   policy:
@@ -426,7 +426,7 @@ spec:
             name: tls
           - port: 8188
             name: https-discovery
-      gto-external-ingressgateway:
+      ge-ingressgateway:
         enabled: true
         runtime:
           deployment:
@@ -435,9 +435,9 @@ spec:
         service:
           metadata:
             labels:
-              app: gto-external-ingressgateway
+              app: ge-ingressgateway
           selector:
-            app: gto-external-ingressgateway
+            app: ge-ingressgateway
     openshiftRoute:
       enabled: false
   policy:

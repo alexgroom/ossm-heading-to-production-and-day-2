@@ -20,7 +20,7 @@ echo
 sleep 5
 echo "Update to keep Prometheus metrics for up to 1 week before discarding"
 echo "--------------------------------------------------------------------"
-oc -n $SM_CP_NS patch deployment prometheus --type='json' -p='[{"op": "replace", "path": "/spec/template/spec/containers/1/args", "value": ["--storage.tsdb.retention.time=168h","--storage.tsdb.path=/prometheus","--config.file=/etc/prometheus/prometheus.yml","--discovery.member-roll-name=default","--discovery.member-roll-namespace='${SM_CP_NS}'"]}]'
+oc -n $SM_CP_NS patch deployment prometheus --type='json' -p='[{"op": "replace", "path": "/spec/template/spec/containers/1/args", "value": ["--storage.tsdb.retention.time=168h","--storage.tsdb.path=/prometheus","--config.file=/etc/prometheus/prometheus.yml"]}]'
 echo
 sleep 5
 echo "Current SMCP Prometheus Arguments"

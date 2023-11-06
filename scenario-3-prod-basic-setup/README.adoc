@@ -155,7 +155,7 @@ The above script has already utilized the `jaeger-small-production` setup in the
 A `production` deployment of `ServiceMeshControlPlane` utilizing the external `Jaeger` resource will have been created in the `prod-istio-system` namespace.
 ----
 NAME         READY   STATUS            PROFILES      VERSION   AGE
-production   10/10   ComponentsReady   ["default"]   2.3.0     6m41s
+production   10/10   ComponentsReady   ["default"]   2.4.0     6m41s
 
 apiVersion: maistra.io/v2
 kind: ServiceMeshControlPlane
@@ -199,7 +199,7 @@ spec:
       enabled: true
     prometheus:
       enabled: true
-  version: v2.3
+  version: v2.4
   telemetry:
     type: Istiod"
 ----

@@ -2,7 +2,7 @@
 
 ENV=$1
 SM_CP_NS=$2
-PREFIX=gto-external
+PREFIX=ge
 
 
 https_mutual_route=$(oc get route $PREFIX -o jsonpath='{.spec.host}' -n $SM_CP_NS)
@@ -143,11 +143,11 @@ echo
 
 place="Warsaw"
 echo "----- External (GTO) Travel Search for [$place] ------------------------------------------------------------------"
-call-via-mtls-travel-agency-api.sh https://$https_mutual_route $place
+./scripts/call-via-mtls-travel-agency-api.sh https://$https_mutual_route $place
 echo
 place="Brussels"
 echo "----- External (GTO) Travel Search for [$place] ------------------------------------------------------------------"
-call-via-mtls-travel-agency-api.sh https://$https_mutual_route $place
+./scripts/call-via-mtls-travel-agency-api.sh https://$https_mutual_route $place
 echo
 #place="Tallinn"
 #echo "----- External (GTO) Travel Search for [$place] ------------------------------------------------------------------"

@@ -39,7 +39,7 @@ In the `Travel Agency` mesh the following `NetworkPolicy` resources have been ap
 ----
 oc get networkpolicy -n prod-istio-system
 NAME                            POD-SELECTOR                                                                                                                                                                         AGE
-gto-external-ingressgateway     app=gto-external-ingressgateway,istio=ingressgateway                                                                                                                                 49d
+ge-ingressgateway     app=ge-ingressgateway,istio=ingressgateway                                                                                                                                 49d
 istio-expose-route-production   maistra.io/expose-route=true                                                                                                                                                         73d
 istio-grafana-ingress           app=grafana                                                                                                                                                                          73d
 istio-ingressgateway            app=istio-ingressgateway,istio=ingressgateway                                                                                                                                        73d
@@ -104,7 +104,7 @@ Routes Match (RDS last loaded at Mon, 03 Oct 2022 13:37:48 BST)
 or
 istio-1.12.9/istioctl proxy-status -i prod-istio-system
 NAME                                                               CDS        LDS        EDS        RDS          ISTIOD                                 VERSION
-gto-external-ingressgateway-787786d5d5-trwh8.prod-istio-system     SYNCED     SYNCED     SYNCED     SYNCED       istiod-production-54ff8b69f7-ccs55     1.12.9
+ge-ingressgateway-787786d5d5-trwh8.prod-istio-system     SYNCED     SYNCED     SYNCED     SYNCED       istiod-production-54ff8b69f7-ccs55     1.12.9
 hotels-v1-687fbd9d69-zzzc6.prod-travel-agency                      SYNCED     SYNCED     SYNCED     SYNCED       istiod-production-54ff8b69f7-ccs55     1.12.9
 insurances-v1-8b5f9b79-9qrh5.prod-travel-agency                    SYNCED     SYNCED     SYNCED     SYNCED       istiod-production-54ff8b69f7-fht6f     1.12.9
 istio-egressgateway-c789977b4-rrnbf.prod-istio-system              SYNCED     SYNCED     SYNCED     NOT SENT     istiod-production-54ff8b69f7-fht6f     1.12.9

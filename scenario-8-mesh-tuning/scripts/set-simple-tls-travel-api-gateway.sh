@@ -33,12 +33,12 @@ spec:
         protocol: HTTPS
         name: https
       hosts:
-        - gto-external-prod-istio-system.apps.ocp4.rhlab.de
+        - ge-prod-istio-system.apps.ocp4.rhlab.de
       tls:
         mode: SIMPLE
-        credentialName: gto-external-secret
+        credentialName: ge-secret
   selector:
-    app: gto-external-ingressgateway "
+    app: ge-ingressgateway "
     
 echo "kind: Gateway
 apiVersion: networking.istio.io/v1alpha3
@@ -52,9 +52,9 @@ spec:
         protocol: HTTPS
         name: https
       hosts:
-        - gto-external-prod-istio-system.apps.$CLUSTER_NAME.$DOMAIN_NAME
+        - ge-prod-istio-system.apps.$CLUSTER_NAME.$DOMAIN_NAME
       tls:
         mode: SIMPLE
-        credentialName: gto-external-secret
+        credentialName: ge-secret
   selector:
-    app: gto-external-ingressgateway " |oc apply -f -
+    app: ge-ingressgateway " |oc apply -f -

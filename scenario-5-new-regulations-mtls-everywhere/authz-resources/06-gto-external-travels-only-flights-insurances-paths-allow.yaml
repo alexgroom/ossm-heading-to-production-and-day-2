@@ -1,12 +1,12 @@
 apiVersion: security.istio.io/v1beta1
 kind: AuthorizationPolicy
 metadata:
-  name: authpolicy-gto-external
+  name: authpolicy-ge
   namespace: prod-istio-system
 spec:
   selector:
     matchLabels:
-      app: gto-external-ingressgateway
+      app: ge-ingressgateway
   action: DENY
   rules:
     # https://istio.io/latest/docs/reference/config/security/conditions/

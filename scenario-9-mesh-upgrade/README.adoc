@@ -164,7 +164,7 @@ done
 
 elasticsearch-cdm-pr    -
 grafana                 - 2.2.3
-gto-external-ingress    - 2.2.3
+ge-ingress    - 2.2.3
 istio-egressgateway     - 2.2.3
 istio-ingressgateway    - 2.2.3
 istiod-production       - 2.2.3

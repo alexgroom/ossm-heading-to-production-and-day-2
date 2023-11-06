@@ -11,10 +11,10 @@ echo "# Deploy Travel Domain Services                                 #"
 echo "#                                                               #"
 echo "#################################################################"
 echo
-../login-as.sh farid
-../../common-scripts/create-membership.sh prod-istio-system production prod-travel-agency
+./login-as.sh farid
+../common-scripts/create-membership.sh prod-istio-system production prod-travel-agency
 sleep 5
-./deploy-travel-services-domain.sh prod prod-istio-system
+./scripts/deploy-travel-services-domain.sh prod prod-istio-system
 
 sleep 7
 
@@ -26,8 +26,8 @@ echo "# Deploy Portal Domain Services                                 #"
 echo "#                                                               #"
 echo "#################################################################"
 echo
-../login-as.sh cristina
-../../common-scripts/create-membership.sh prod-istio-system production prod-travel-control
-../../common-scripts/create-membership.sh prod-istio-system production prod-travel-portal
+./login-as.sh cristina
+../common-scripts/create-membership.sh prod-istio-system production prod-travel-control
+../common-scripts/create-membership.sh prod-istio-system production prod-travel-portal
 sleep 5
-./deploy-travel-portal-domain.sh prod prod-istio-system $DOMAIN_NAME
+./scripts/deploy-travel-portal-domain.sh prod prod-istio-system $DOMAIN_NAME

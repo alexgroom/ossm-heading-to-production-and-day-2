@@ -143,7 +143,7 @@ oc delete secret istio-ca-secret -n prod-istio-system
 +
 ----
 ./login-as.sh emma
-oc -n prod-istio-system delete pods -l 'app in (istiod,istio-ingressgateway, istio-egressgateway,gto-external-ingressgateway)'
+oc -n prod-istio-system delete pods -l 'app in (istiod,istio-ingressgateway, istio-egressgateway,ge-ingressgateway)'
 oc -n prod-istio-system get -w pods
 ----
 
@@ -330,7 +330,7 @@ Further authorization capabilities are described in the `Istio` link:https://ist
 
 | ALLOW all | `prod-istio-system` -> `prod-travel-control` | Browser | `control.prod-travel-control` | `https://travel-prod-istio-system.apps.<CLUSTERNAME>.<BASEDOMAIN>/`
 
-| ALLOW all | `prod-istio-system` -> `prod-travel-agency` | `gto-external-ingressgateway` | `travels.prod-travel-agency`, `flights.prod-travel-agency`, `hotels.prod-travel-agency`, `insurances.prod-travel-agency`, `cars.prod-travel-agency` | see SCRIPT below
+| ALLOW all | `prod-istio-system` -> `prod-travel-agency` | `ge-ingressgateway` | `travels.prod-travel-agency`, `flights.prod-travel-agency`, `hotels.prod-travel-agency`, `insurances.prod-travel-agency`, `cars.prod-travel-agency` | see SCRIPT below
 
 | ALLOW all | `prod-travel-control` -> `prod-travel-agency` | `control.prod-travel-control` | `travels.prod-travel-agency`, `flights.prod-travel-agency`, `hotels.prod-travel-agency`, `insurances.prod-travel-agency`, `cars.prod-travel-agency` | see SCRIPT below
 
@@ -354,11 +354,11 @@ Further authorization capabilities are described in the `Istio` link:https://ist
 
 Authorization prod-istio-system --> prod-travel-agency
 -------------------------------------------------------------------
-[ALLOW] gto-external-ingressgateway --> travels.prod-travel-agency
-[ALLOW] gto-external-ingressgateway --> cars.prod-travel-agency
-[ALLOW] gto-external-ingressgateway --> flights.prod-travel-agency
-[ALLOW] gto-external-ingressgateway --> insurances.prod-travel-agency
-[ALLOW] gto-external-ingressgateway --> hotels.prod-travel-agency
+[ALLOW] ge-ingressgateway --> travels.prod-travel-agency
+[ALLOW] ge-ingressgateway --> cars.prod-travel-agency
+[ALLOW] ge-ingressgateway --> flights.prod-travel-agency
+[ALLOW] ge-ingressgateway --> insurances.prod-travel-agency
+[ALLOW] ge-ingressgateway --> hotels.prod-travel-agency
 
 Authorization prod-travel-control --> prod-travel-agency
 -------------------------------------------------------------------
@@ -394,7 +394,7 @@ Authorization prod-travel-agency --> prod-travel-agency
 Actions with role `Mesh Developer`
 ====
 
-* In the previous link:https://gitlab.consulting.redhat.com/servicemesh-in-action/ossm-heading-to-production-and-day-2/-/blob/main/scenario-4-onboard-new-portal-with-authentication/README.adoc#user-content-create-requestauthentication-and-authorizationpolicy-to-allow-access-for-gto-external-user-gtouser[scenario-4] we applied an `AuthorizationPolicy` resource (`authpolicy-gto-external`) which allows requests flowing via the `gto-external-ingressgateway`. Now, we will utilize the `default-deny` pattern to DENY requests unless there is a specific `AuthorizationPolicy` allowing it.
+* In the previous link:https://gitlab.consulting.redhat.com/servicemesh-in-action/ossm-heading-to-production-and-day-2/-/blob/main/scenario-4-onboard-new-portal-with-authentication/README.adoc#user-content-create-requestauthentication-and-authorizationpolicy-to-allow-access-for-ge-user-gtouser[scenario-4] we applied an `AuthorizationPolicy` resource (`authpolicy-ge`) which allows requests flowing via the `ge-ingressgateway`. Now, we will utilize the `default-deny` pattern to DENY requests unless there is a specific `AuthorizationPolicy` allowing it.
 ** As *cristina* (`Mesh Developer`) _Travel Portal Domain Owner (Tech Lead)_ apply the `default-deny` pattern to `prod-travel-control` namespace.
 +
 ----
@@ -419,7 +419,7 @@ oc apply -f authz-resources/01-default-deny-travel-agency-access.yaml
 
 | DENY all | `prod-istio-system` -> `prod-travel-control` | Browser | `https://travel-prod-istio-system.apps.ocp4.rhlab.de/` | `https://travel-prod-istio-system.apps.<CLUSTERNAME>.<BASEDOMAIN>/` (see screenshot below)
 
-| DENY all | `prod-istio-system` -> `prod-travel-agency` | `gto-external-ingressgateway` | `travels.prod-travel-agency`, `flights.prod-travel-agency`, `hotels.prod-travel-agency`, `insurances.prod-travel-agency`, `cars.prod-travel-agency` | see SCRIPT below
+| DENY all | `prod-istio-system` -> `prod-travel-agency` | `ge-ingressgateway` | `travels.prod-travel-agency`, `flights.prod-travel-agency`, `hotels.prod-travel-agency`, `insurances.prod-travel-agency`, `cars.prod-travel-agency` | see SCRIPT below
 
 | DENY all | `prod-travel-control` -> `prod-travel-agency` | `control.prod-travel-control` | `travels.prod-travel-agency`, `flights.prod-travel-agency`, `hotels.prod-travel-agency`, `insurances.prod-travel-agency`, `cars.prod-travel-agency` | see SCRIPT below
 
@@ -446,11 +446,11 @@ image::../images/portal-ui-rback-denied.png[300,700]
 
 Authorization prod-istio-system --> prod-travel-agency
 -------------------------------------------------------------------
-[DENY] gto-external-ingressgateway --> travels.prod-travel-agency
-[DENY] gto-external-ingressgateway --> cars.prod-travel-agency
-[DENY] gto-external-ingressgateway --> flights.prod-travel-agency
-[DENY] gto-external-ingressgateway --> insurances.prod-travel-agency
-[DENY] gto-external-ingressgateway --> hotels.prod-travel-agency
+[DENY] ge-ingressgateway --> travels.prod-travel-agency
+[DENY] ge-ingressgateway --> cars.prod-travel-agency
+[DENY] ge-ingressgateway --> flights.prod-travel-agency
+[DENY] ge-ingressgateway --> insurances.prod-travel-agency
+[DENY] ge-ingressgateway --> hotels.prod-travel-agency
 
 Authorization prod-travel-control --> prod-travel-agency
 -------------------------------------------------------------------
@@ -503,28 +503,28 @@ oc apply -f authz-resources/02-travel-portal-allow-istio-ingressgateway-traffic.
 
 * The result is access to the _Travel Portal_ UI is (within a few seconds) reinstated (try link:https://travel-prod-istio-system.apps.<CLUSTERNAME>.<BASEDOMAIN>/[`https://travel-prod-istio-system.apps.<CLUSTERNAME>.<BASEDOMAIN>/`])
 
-2. As *farid* (`Mesh Operator`) _Travel Services Domain Owner (Tech Lead)_ allow access from `gto-external-ingressgateway` towards `travels.prod-travel-agency`, `hotels.prod-travel-agency`, `cars.prod-travel-agency`, `insurances.prod-travel-agency`, `flights.prod-travel-agency` in order to enable _GTO_ Travel search requests.
-* At the `gto-external-ingressgateway` the _authz_ policy is set already to `ALLOW` calls on any /PATH for any external principal (link:https://istio.io/latest/docs/reference/config/security/authorization-policy/#Source[`requestPrincipals[*]`])
-* The principal `"cluster.local/ns/prod-istio-system/sa/gto-external-ingressgateway-service-account"` will now be allowed to make calls to `prod-travel-agency` namespace.
+2. As *farid* (`Mesh Operator`) _Travel Services Domain Owner (Tech Lead)_ allow access from `ge-ingressgateway` towards `travels.prod-travel-agency`, `hotels.prod-travel-agency`, `cars.prod-travel-agency`, `insurances.prod-travel-agency`, `flights.prod-travel-agency` in order to enable _GTO_ Travel search requests.
+* At the `ge-ingressgateway` the _authz_ policy is set already to `ALLOW` calls on any /PATH for any external principal (link:https://istio.io/latest/docs/reference/config/security/authorization-policy/#Source[`requestPrincipals[*]`])
+* The principal `"cluster.local/ns/prod-istio-system/sa/ge-ingressgateway-service-account"` will now be allowed to make calls to `prod-travel-agency` namespace.
 +
 ----
 ./login-as.sh farid
-oc apply -f authz-resources/03-gto-external-travels-to-travel-agency-allow.yaml
+oc apply -f authz-resources/03-ge-travels-to-travel-agency-allow.yaml
 ----
 ** Access from `GTO` is allowed (ie. no longer *403* errors) but `connection refused` error received. Why?
 +
 ----
 TOKEN=$(curl -Lk --data "username=gtouser&password=gtouser&grant_type=password&client_id=istio&client_secret=bcd06d5bdd1dbaaf81853d10a66aeb989a38dd51" https://keycloak-rhsso.apps.ocp4.rhlab.de/auth/realms/servicemesh-lab/protocol/openid-connect/token | jq .access_token)
-../scenario-4-onboard-new-portal-with-authentication/scripts/call-via-mtls-and-jwt-travel-agency-api.sh prod-istio-system gto-external $TOKEN
+../scenario-4-onboard-new-portal-with-authentication/scripts/call-via-mtls-and-jwt-travel-agency-api.sh prod-istio-system ge $TOKEN
 
 < HTTP/2 500
 ...
-* Connection #0 to host gto-external-prod-istio-system.apps.ocp4.rhlab.de left intact
+* Connection #0 to host ge-prod-istio-system.apps.ocp4.rhlab.de left intact
 {
   "error": "invalid connection"
 }
 ----
-** Inspect KIALI and notice `gto-external-ingressgateway` -> `*.prod-travel-agecny` is fine but `flights` to `mysqldb` is not _authorized_. What can we do?
+** Inspect KIALI and notice `ge-ingressgateway` -> `*.prod-travel-agecny` is fine but `flights` to `mysqldb` is not _authorized_. What can we do?
 +
 image::../images/flights-to-mysqldb-authz-error.png[500,1000]
 
@@ -540,7 +540,7 @@ oc apply -f authz-resources/04-intra-travel-agency-allow.yaml
 +
 ----
 TOKEN=$(curl -Lk --data "username=gtouser&password=gtouser&grant_type=password&client_id=istio&client_secret=bcd06d5bdd1dbaaf81853d10a66aeb989a38dd51" https://keycloak-rhsso.apps.<CLUSTERNAME>.<BASEDOMAIN>/auth/realms/servicemesh-lab/protocol/openid-connect/token | jq .access_token)
-../scenario-4-onboard-new-portal-with-authentication/scripts/call-via-mtls-and-jwt-travel-agency-api.sh prod-istio-system gto-external $TOKEN
+../scenario-4-onboard-new-portal-with-authentication/scripts/call-via-mtls-and-jwt-travel-agency-api.sh prod-istio-system ge $TOKEN
 ----
 ** test intra-namespace communicationss
 +
@@ -557,11 +557,11 @@ TOKEN=$(curl -Lk --data "username=gtouser&password=gtouser&grant_type=password&c
 
 Authorization prod-istio-system --> prod-travel-agency
 -------------------------------------------------------------------
-[ALLOW] gto-external-ingressgateway --> travels.prod-travel-agency
-[ALLOW] gto-external-ingressgateway --> cars.prod-travel-agency
-[ALLOW] gto-external-ingressgateway --> flights.prod-travel-agency
-[ALLOW] gto-external-ingressgateway --> insurances.prod-travel-agency
-[ALLOW] gto-external-ingressgateway --> hotels.prod-travel-agency
+[ALLOW] ge-ingressgateway --> travels.prod-travel-agency
+[ALLOW] ge-ingressgateway --> cars.prod-travel-agency
+[ALLOW] ge-ingressgateway --> flights.prod-travel-agency
+[ALLOW] ge-ingressgateway --> insurances.prod-travel-agency
+[ALLOW] ge-ingressgateway --> hotels.prod-travel-agency
 
 Authorization prod-travel-control --> prod-travel-agency
 -------------------------------------------------------------------
@@ -614,11 +614,11 @@ This does not mean that `ALLOW` all is possible and executing the following show
 
 Finally, the _Travel Agency_ business development department has concluded a business agreement with the _GTO_ which only allows the latter to source `flights` and `insurances` from the _Travel Agency APIs_. As a result the `Authorization Policy` will determine more fine grained access authorization based on this business agreement.
 
-1. As *emma* (`Mesh Operator`) `DENY` communications from `gto-external-ingressgateway` towards any Operation that is link:https://istio.io/latest/docs/reference/config/security/authorization-policy/#Operation[`notPaths`] `/flights` or `/insurances`.
+1. As *emma* (`Mesh Operator`) `DENY` communications from `ge-ingressgateway` towards any Operation that is link:https://istio.io/latest/docs/reference/config/security/authorization-policy/#Operation[`notPaths`] `/flights` or `/insurances`.
 +
 ----
 ./login-as.sh emma
-oc apply -f authz-resources/06-gto-external-travels-only-flights-insurances-paths-allow.yaml
+oc apply -f authz-resources/06-ge-travels-only-flights-insurances-paths-allow.yaml
 ----
 * Checking what is now allowed for `GTO` should yield the following results.
 +

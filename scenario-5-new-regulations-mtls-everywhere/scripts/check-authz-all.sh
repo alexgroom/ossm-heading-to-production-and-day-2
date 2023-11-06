@@ -13,7 +13,7 @@ echo "#                                                                  #"
 echo "####################################################################"
 
 #echo "---------------------------------------------------------------------------------------"
-GATEWAY_URL=$(oc get route gto-external -o jsonpath='{.spec.host}' -n $SM_CP_NS)
+GATEWAY_URL=$(oc get route ge -o jsonpath='{.spec.host}' -n $SM_CP_NS)
 #echo GATEWAY_URL:  $GATEWAY_URL
 echo
 TOKEN=$(curl -sLk --data "username=gtouser&password=gtouser&grant_type=password&client_id=istio&client_secret=bcd06d5bdd1dbaaf81853d10a66aeb989a38dd51" https://keycloak-rhsso.apps.$CLUSTERNAME.$BASEDOMAIN/auth/realms/servicemesh-lab/protocol/openid-connect/token | jq .access_token)
@@ -32,33 +32,33 @@ echo "-------------------------------------------------------------------"
 
 if [[ $travels -eq 200 ]]
 then
-  echo "[ALLOW] gto-external-ingressgateway --> travels.prod-travel-agency"
+  echo "[ALLOW] ge-ingressgateway --> travels.prod-travel-agency"
 else
-  echo "[DENY] gto-external-ingressgateway --> travels.prod-travel-agency"
+  echo "[DENY] ge-ingressgateway --> travels.prod-travel-agency"
 fi
 if [[ cars -eq 200 ]]
 then
-  echo "[ALLOW] gto-external-ingressgateway --> cars.prod-travel-agency"
+  echo "[ALLOW] ge-ingressgateway --> cars.prod-travel-agency"
 else
-  echo "[DENY] gto-external-ingressgateway --> cars.prod-travel-agency"
+  echo "[DENY] ge-ingressgateway --> cars.prod-travel-agency"
 fi
 if [[ flights -eq 200 ]]
 then
-  echo "[ALLOW] gto-external-ingressgateway --> flights.prod-travel-agency"
+  echo "[ALLOW] ge-ingressgateway --> flights.prod-travel-agency"
 else
-  echo "[DENY] gto-external-ingressgateway --> flights.prod-travel-agency"
+  echo "[DENY] ge-ingressgateway --> flights.prod-travel-agency"
 fi
 if [[ insurances -eq 200 ]]
 then
-  echo "[ALLOW] gto-external-ingressgateway --> insurances.prod-travel-agency"
+  echo "[ALLOW] ge-ingressgateway --> insurances.prod-travel-agency"
 else
-  echo "[DENY] gto-external-ingressgateway --> insurances.prod-travel-agency"
+  echo "[DENY] ge-ingressgateway --> insurances.prod-travel-agency"
 fi
 if [[ hotels -eq 200 ]]
 then
-  echo "[ALLOW] gto-external-ingressgateway --> hotels.prod-travel-agency"
+  echo "[ALLOW] ge-ingressgateway --> hotels.prod-travel-agency"
 else
-  echo "[DENY] gto-external-ingressgateway --> hotels.prod-travel-agency"
+  echo "[DENY] ge-ingressgateway --> hotels.prod-travel-agency"
 fi
 
 
