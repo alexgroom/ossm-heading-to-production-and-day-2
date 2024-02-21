@@ -88,6 +88,7 @@ echo "oc create secret generic $PREFIX-secret
         --from-file=ca.crt=ca-root.crt \
         -n $SM_CP_NS"
 
+oc delete -n $SM_CP_NS secret $PREFIX-secret
 oc create -n $SM_CP_NS secret generic $PREFIX-secret \
         --from-file=tls.key=$PREFIX-app.key \
         --from-file=tls.crt=$PREFIX-app.crt \

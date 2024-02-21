@@ -14,7 +14,7 @@ echo 'SMR Resource Name       : '$SERVICE_MESH_MEMBER_RESOURCE_NAME
 echo '-------------------------------------------------------------------------'
 
 
-echo "################# ServiceMeshMeber - [$SERVICE_MESH_MEMBER_RESOURCE_NAME] for [$APP_NAMESPACE]  #################" 
+echo "################# ServiceMeshMember - [$SERVICE_MESH_MEMBER_RESOURCE_NAME] for [$APP_NAMESPACE]  #################" 
 
 echo "apiVersion: maistra.io/v1
 kind: ServiceMeshMember

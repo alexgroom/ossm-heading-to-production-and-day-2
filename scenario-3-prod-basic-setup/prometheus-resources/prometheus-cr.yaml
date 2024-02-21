@@ -64,7 +64,7 @@ spec:
         - weight: 2
           preference:
             matchExpressions:
-              - key: beta.kubernetes.io/arch
+              - key: kubernetes.io/arch
                 operator: In
                 values:
                   - s390x
